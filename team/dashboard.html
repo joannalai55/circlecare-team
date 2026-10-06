@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CircleCare — Team Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+:root{
+  --bg:#f3efe7; --bg-2:#ebe4d9; --card:#fffdf9; --line:#ddd3c4;
+  --text:#1e1d1a; --muted:#726b62; --brand:#1f7a68; --brand-soft:#d9eee9;
+  --warn:#ab6a08; --warn-soft:#fff2d8; --danger:#b63a29; --danger-soft:#fce8e4;
+  --ok:#207543; --ok-soft:#e6f5ea;
+  --shadow:0 10px 30px rgba(52,41,26,.08); --radius:20px;
+}
+body{margin:0;background:linear-gradient(180deg,#f7f3eb 0%,#f3efe7 40%,#efe8dc 100%);color:var(--text);font-family:"Noto Sans TC",sans-serif;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 60px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px;margin-bottom:6px}
+h1{font-size:28px;font-weight:900;margin:0}
+h1 .paw{font-size:24px}
+.tagline{color:var(--muted);font-size:14px}
+.updated{margin-left:auto;font-size:12px;color:var(--muted);background:var(--bg-2);padding:4px 12px;border-radius:99px}
+h2{font-size:16px;font-weight:700;margin:34px 0 14px;display:flex;align-items:center;gap:8px}
+h2 .count{font-size:12px;font-weight:500;color:var(--muted);background:var(--bg-2);border-radius:99px;padding:2px 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:12px}
+.member-top{display:flex;align-items:center;gap:12px}
+.avatar{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0}
+.mname{font-weight:900;font-size:17px}
+.mname small{font-weight:500;color:var(--muted);margin-left:6px}
+.mrole{font-size:13px;color:var(--muted)}
+.status{margin-left:auto;font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;white-space:nowrap}
+.status.idle{background:var(--bg-2);color:var(--muted)}
+.status.working{background:var(--warn-soft);color:var(--warn)}
+.status.done{background:var(--ok-soft);color:var(--ok)}
+.status.blocked{background:var(--danger-soft);color:var(--danger)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:11px;background:var(--bg-2);color:var(--muted);border-radius:99px;padding:3px 10px}
+.task{font-size:13px;background:var(--brand-soft);border-radius:12px;padding:10px 12px}
+.task b{color:var(--brand)}
+.outputs{font-size:13px}
+.outputs .o{display:flex;gap:8px;padding:5px 0;border-top:1px dashed var(--line);color:var(--muted)}
+.outputs .o:first-child{border-top:none}
+.outputs .o .d{white-space:nowrap;font-size:11px;opacity:.7;padding-top:2px}
+.invoke{font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+.invoke code{background:var(--bg-2);padding:2px 8px;border-radius:8px;font-family:inherit;font-size:12px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;font-size:13px}
+table{border-radius:var(--radius);overflow:hidden;display:table}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line)}
+th{background:var(--bg-2);font-size:12px;color:var(--muted)}
+tr:last-child td{border-bottom:none}
+.pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px}
+.pill.open{background:var(--warn-soft);color:var(--warn)}
+.pill.done{background:var(--ok-soft);color:var(--ok)}
+.pill.overdue{background:var(--danger-soft);color:var(--danger)}
+.feed{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:8px 20px}
+.feed .f{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line);font-size:13px}
+.feed .f:last-child{border-bottom:none}
+.feed .fd{color:var(--muted);font-size:12px;white-space:nowrap;padding-top:1px}
+.feed .fw{font-weight:700;white-space:nowrap}
+.empty{color:var(--muted);font-size:13px;padding:16px;text-align:center}
+.composer{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:14px}
+.who{display:flex;flex-wrap:wrap;gap:8px}
+.who button{font-family:inherit;font-size:13px;font-weight:700;border:1.5px solid var(--line);background:var(--bg-2);color:var(--muted);border-radius:99px;padding:7px 14px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.who button.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand)}
+.composer textarea{font-family:inherit;font-size:14px;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;resize:vertical;min-height:64px;background:#fff;color:var(--text)}
+.composer textarea:focus{outline:none;border-color:var(--brand)}
+.tmpl{display:flex;flex-wrap:wrap;gap:6px}
+.tmpl button{font-family:inherit;font-size:11px;border:none;background:var(--bg-2);color:var(--muted);border-radius:99px;padding:4px 11px;cursor:pointer}
+.tmpl button:hover{background:var(--brand-soft);color:var(--brand)}
+.cmd-row{display:flex;gap:10px;align-items:stretch}
+.cmd{flex:1;font-size:13px;background:var(--bg-2);border-radius:12px;padding:11px 14px;color:var(--text);word-break:break-all;min-height:20px}
+.cmd.placeholder{color:var(--muted)}
+.copy-btn{font-family:inherit;font-size:13px;font-weight:700;border:none;background:var(--brand);color:#fff;border-radius:12px;padding:0 20px;cursor:pointer;white-space:nowrap}
+.copy-btn:disabled{background:var(--line);cursor:default}
+.copy-note{font-size:12px;color:var(--muted)}
+.hint{margin-top:36px;background:var(--bg-2);border-radius:var(--radius);padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.8}
+.hint b{color:var(--text)}
+@media(max-width:640px){.updated{margin-left:0}}
+.dispatch-btn{font-family:inherit;font-size:14px;font-weight:700;border:none;background:var(--brand);color:#fff;border-radius:12px;padding:0 22px;cursor:pointer;white-space:nowrap}
+.dispatch-btn:disabled{background:var(--line);cursor:default}
+.dispatch-note{font-size:12px;color:var(--muted)}
+.dispatch-note.err{color:var(--danger)}
+.offline-banner{display:none;background:var(--danger-soft);color:var(--danger);border-radius:var(--radius);padding:10px 16px;font-size:13px;margin-bottom:16px}
+.runs{display:flex;flex-direction:column;gap:10px}
+.run{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:14px 18px}
+.run-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.run-who{font-weight:700;font-size:13px}
+.run-task{font-size:13px;color:var(--muted);flex:1}
+.run-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.run-status.running{background:var(--warn-soft);color:var(--warn)}
+.run-status.done{background:var(--ok-soft);color:var(--ok)}
+.run-status.blocked{background:var(--danger-soft);color:var(--danger)}
+.run-result{font-size:12.5px;color:var(--text);margin-top:8px;white-space:pre-wrap;background:var(--bg-2);border-radius:10px;padding:8px 10px;max-height:160px;overflow:auto}
+.run-time{font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1><span class="paw">🐾</span> <span id="company"></span> Team Dashboard</h1>
+    <span class="tagline" id="tagline"></span>
+    <span class="updated">Last updated: <span id="updated"></span></span>
+  </header>
+  <div class="offline-banner" id="offline-banner">⚠️ 連不到 dispatch server — 請在 team/ 資料夾執行 <code>./start.sh</code>（或 <code>node server.js</code>），再重新整理這頁。</div>
+
+  <h2>👥 Team <span class="count" id="member-count"></span></h2>
+  <div class="grid" id="members"></div>
+
+  <h2>📣 派工 <span class="count">選成員 → 寫任務 → 直接派工執行</span></h2>
+  <div class="composer">
+    <div class="who" id="who"></div>
+    <div class="tmpl" id="tmpl"></div>
+    <textarea id="task-input" placeholder="想請他們做什麼？例如：研究韓國 FitPet 的商業模式，重點是他們怎麼跟醫學會合作"></textarea>
+    <div class="cmd-row">
+      <div class="cmd placeholder" id="cmd">指令會出現在這裡</div>
+      <button class="dispatch-btn" id="dispatch-btn" disabled>派工 🚀</button>
+    </div>
+    <div class="dispatch-note" id="dispatch-note">Preview mode by default. To run agents, explicitly enable local Claude Code dispatch. This can use your Claude account and modify files in this project.</div>
+  </div>
+
+  <h2>🖥️ 執行紀錄 <span class="count" id="run-count"></span></h2>
+  <div class="runs" id="runs"></div>
+
+  <h2>✅ Action Items <span class="count" id="ai-count"></span></h2>
+  <div id="action-items"></div>
+
+  <h2>🕒 Recent Activity</h2>
+  <div class="feed" id="activity"></div>
+
+  <div class="hint">Public edition: sample data only. Automatic inbox scanning and messaging integrations are not included. Agent roles are AI personas. Refreshes from the local server every few seconds.</div>
+</div>
+
+<script>
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let D = null;
+const statusLabel = {idle:"閒置中", working:"工作中", done:"剛完成", blocked:"卡住了"};
+
+async function fetchJSON(url, opts){
+  const r = await fetch(url, opts);
+  if(!r.ok){ const b = await r.json().catch(()=>({})); throw new Error(b.error || r.statusText); }
+  return r.json();
+}
+
+function renderAll(){
+  if(!D) return;
+  document.getElementById("company").textContent = D.company;
+  document.getElementById("tagline").textContent = D.tagline;
+  document.getElementById("updated").textContent = D.lastUpdated;
+  document.getElementById("member-count").textContent = D.members.length + " members";
+  renderMembers();
+  renderActionItems();
+  renderActivity();
+  renderWho();
+}
+
+function renderMembers(){
+  document.getElementById("members").innerHTML = D.members.map(m => `
+  <div class="card">
+    <div class="member-top">
+      <div class="avatar" style="background:${m.color}22">${m.emoji}</div>
+      <div>
+        <div class="mname">${esc(m.name)}<small>${esc(m.zhName)}</small></div>
+        <div class="mrole">${esc(m.role)}</div>
+      </div>
+      <span class="status ${esc(m.status)}">${statusLabel[m.status] || esc(m.status)}</span>
+    </div>
+    <div class="chips">${m.skills.map(s=>`<span class="chip">${esc(s)}</span>`).join("")}</div>
+    ${m.currentTask ? `<div class="task"><b>Now:</b> ${esc(m.currentTask)}</div>` : ""}
+    <div class="outputs">
+      ${m.recentOutputs && m.recentOutputs.length
+        ? m.recentOutputs.slice(0,3).map(o=>`<div class="o"><span class="d">${esc(o.date||"")}</span><span>${esc(o.title||o)}</span></div>`).join("")
+        : `<div class="o" style="justify-content:center">尚無產出</div>`}
+    </div>
+    <div class="invoke">💬 <code>${esc(m.howToInvoke)}</code></div>
+  </div>
+`).join("");
+}
+
+function renderActionItems(){
+  const items = D.actionItems || [];
+  document.getElementById("ai-count").textContent = items.filter(i=>i.status!=="done").length + " open";
+  document.getElementById("action-items").innerHTML = items.length ? `
+    <table>
+      <tr><th>Item</th><th>Owner</th><th>Due</th><th>Status</th><th>Source</th></tr>
+      ${items.map(i=>{
+        const overdue = i.status==="open" && i.due && i.due < D.lastUpdated;
+        const cls = overdue ? "overdue" : (i.status==="done" ? "done" : "open");
+        const label = overdue ? "逾期" : (i.status==="done" ? "完成" : "進行中");
+        return `<tr><td>${esc(i.item)}</td><td>${esc(i.owner)}</td><td>${esc(i.due||"—")}</td><td><span class="pill ${cls}">${label}</span></td><td>${esc(i.source||"—")}</td></tr>`;
+      }).join("")}
+    </table>` : `<div class="card"><div class="empty">目前沒有 action items — 開完第一場會議後，Amy 會把它們放到這裡 ✨</div></div>`;
+}
+
+function renderActivity(){
+  document.getElementById("activity").innerHTML = (D.recentActivity||[]).slice(0,10).map(a=>`
+    <div class="f"><span class="fd">${esc(a.date)}</span><span class="fw">${esc(a.who)}</span><span>${esc(a.what)}</span></div>
+  `).join("") || `<div class="empty">還沒有活動</div>`;
+}
+
+/* ---------- 派工 composer ---------- */
+const ROUNDTABLE = {id:"roundtable", name:"圓桌會議", emoji:"🪑", color:"#8a6d3b"};
+const selected = new Set();
+const whoEl = document.getElementById("who");
+const taskEl = document.getElementById("task-input");
+const cmdEl = document.getElementById("cmd");
+const dispatchBtn = document.getElementById("dispatch-btn");
+const dispatchNote = document.getElementById("dispatch-note");
+
+const TEMPLATES = [
+  {label:"研究一個題目", who:["ryan"], text:"幫我研究＿＿＿，重點是＿＿＿"},
+  {label:"檢視一個決策", who:["maggie"], text:"幫我檢視＿＿＿這個決策，指出風險和盲點"},
+  {label:"做一個 demo", who:["evan"], text:"幫我做一個＿＿＿的 demo"},
+  {label:"醫學內容審查", who:["vivi"], text:"幫我審查＿＿＿的醫學正確性"},
+  {label:"整理會議記錄", who:["amy"], text:"這是剛剛會議的內容／錄音，幫我整理成會議記錄並更新 action items"},
+  {label:"更新 pitch deck", who:["amy"], text:"根據最新的討論和產出，更新 pitch deck"},
+  {label:"開圓桌會議", who:["roundtable"], text:"請大家一起討論＿＿＿，各自從自己的角度發表意見並互相回應"},
+];
+
+function renderWho(){
+  const all = [...D.members.map(m=>({id:m.id,name:m.name+"（"+m.zhName+"）",emoji:m.emoji,color:m.color})), ROUNDTABLE];
+  whoEl.innerHTML = all.map(m=>`<button data-id="${esc(m.id)}" class="${selected.has(m.id)?"on":""}">${m.emoji} ${esc(m.name)}</button>`).join("");
+}
+whoEl.addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  const id = b.dataset.id;
+  if(id==="roundtable"){ selected.clear(); selected.add("roundtable"); }
+  else { selected.delete("roundtable"); selected.has(id) ? selected.delete(id) : selected.add(id); }
+  renderWho(); updateCmd();
+});
+
+document.getElementById("tmpl").innerHTML = TEMPLATES.map((t,i)=>`<button data-i="${i}">${esc(t.label)}</button>`).join("");
+document.getElementById("tmpl").addEventListener("click", e=>{
+  const b = e.target.closest("button"); if(!b) return;
+  const t = TEMPLATES[b.dataset.i];
+  selected.clear(); t.who.forEach(id=>selected.add(id));
+  taskEl.value = t.text;
+  renderWho(); updateCmd(); taskEl.focus();
+});
+
+function buildCmd(){
+  const task = taskEl.value.trim();
+  if(!task || selected.size===0) return "";
+  if(selected.has("roundtable")) return "開圓桌會議：" + task;
+  const names = D.members.filter(m=>selected.has(m.id)).map(m=>m.name).join(" 和 ");
+  return "請 " + names + " " + task;
+}
+function updateCmd(){
+  const c = buildCmd();
+  cmdEl.textContent = c || "指令會出現在這裡";
+  cmdEl.classList.toggle("placeholder", !c);
+  dispatchBtn.disabled = !c;
+}
+taskEl.addEventListener("input", updateCmd);
+
+dispatchBtn.addEventListener("click", async ()=>{
+  const task = taskEl.value.trim();
+  if(!task || selected.size===0) return;
+  const roundtable = selected.has("roundtable");
+  const memberIds = roundtable ? [] : [...selected];
+  dispatchBtn.disabled = true;
+  dispatchBtn.textContent = "派工中…";
+  dispatchNote.textContent = "已送出，背景開始執行…";
+  dispatchNote.classList.remove("err");
+  try{
+    await fetchJSON("/api/dispatch", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body: JSON.stringify({ memberIds, task, roundtable })
+    });
+    taskEl.value = "";
+    selected.clear();
+    renderWho(); updateCmd();
+    dispatchNote.textContent = "已派工！下方「執行紀錄」會自動更新進度與結果。";
+    await refreshRuns();
+    await refreshState();
+  }catch(e){
+    dispatchNote.textContent = "派工失敗：" + e.message;
+    dispatchNote.classList.add("err");
+  }finally{
+    dispatchBtn.textContent = "派工 🚀";
+    updateCmd();
+  }
+});
+
+/* ---------- 執行紀錄 ---------- */
+function fmtTime(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  return d.toLocaleString("zh-TW", {month:"2-digit", day:"2-digit", hour:"2-digit", minute:"2-digit"});
+}
+const runStatusLabel = {running:"執行中…", done:"完成", blocked:"失敗 / 需注意"};
+function renderRuns(runs){
+  document.getElementById("run-count").textContent = runs.length + " 筆";
+  document.getElementById("runs").innerHTML = runs.length ? runs.map(r=>`
+    <div class="run">
+      <div class="run-top">
+        <span class="run-who">${r.roundtable ? "🪑 圓桌會議" : esc((r.who||[]).join("、"))}</span>
+        <span class="run-task">${esc(r.task)}</span>
+        <span class="run-status ${esc(r.status)}">${runStatusLabel[r.status]||esc(r.status)}</span>
+      </div>
+      <div class="run-time">${fmtTime(r.startedAt)}${r.finishedAt ? " → " + fmtTime(r.finishedAt) : ""}${r.cost ? ` · $${r.cost.toFixed(3)}` : ""}</div>
+      ${r.result ? `<div class="run-result">${esc(r.result)}</div>` : ""}
+    </div>
+  `).join("") : `<div class="empty">還沒有派工紀錄</div>`;
+}
+
+/* ---------- polling ---------- */
+const offlineBanner = document.getElementById("offline-banner");
+async function refreshState(){
+  try{
+    D = await fetchJSON("/api/state");
+    offlineBanner.style.display = "none";
+    renderAll();
+  }catch(e){
+    offlineBanner.style.display = "block";
+  }
+}
+async function refreshRuns(){
+  try{ renderRuns(await fetchJSON("/api/runs")); }catch(e){ /* server offline, banner already shown by refreshState */ }
+}
+
+refreshState();
+refreshRuns();
+setInterval(refreshState, 5000);
+setInterval(refreshRuns, 3000);
+</script>
+</body>
+</html>

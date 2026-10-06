@@ -1,0 +1,107 @@
+{
+  "company": "CircleCare",
+  "tagline": "Public demo · sample data · five AI roles",
+  "lastUpdated": "2026-10-06",
+  "members": [
+    {
+      "id": "maggie",
+      "name": "Maggie",
+      "zhName": "梅姬",
+      "role": "Mentor / 資深創業家",
+      "emoji": "🦉",
+      "color": "#8e5bd4",
+      "skills": [
+        "商業策略",
+        "募資 & Pitch",
+        "商業模式",
+        "GTM"
+      ],
+      "howToInvoke": "「請 Maggie 看看我們的定價策略」",
+      "status": "idle",
+      "currentTask": null,
+      "recentOutputs": []
+    },
+    {
+      "id": "ryan",
+      "name": "Ryan",
+      "zhName": "萊恩",
+      "role": "Researcher",
+      "emoji": "🔍",
+      "color": "#2478b8",
+      "skills": [
+        "市場調查",
+        "競品分析",
+        "質化 / 量化研究",
+        "文獻回顧"
+      ],
+      "howToInvoke": "「請 Ryan 研究台灣寵物醫療市場規模」",
+      "status": "idle",
+      "currentTask": null,
+      "recentOutputs": []
+    },
+    {
+      "id": "evan",
+      "name": "Evan",
+      "zhName": "艾文",
+      "role": "Senior Engineer",
+      "emoji": "🛠️",
+      "color": "#1f7a68",
+      "skills": [
+        "產品開發",
+        "Prototype",
+        "技術架構",
+        "Debug"
+      ],
+      "howToInvoke": "「請 Evan 在 prototype 加上疫苗提醒功能」",
+      "status": "idle",
+      "currentTask": null,
+      "recentOutputs": []
+    },
+    {
+      "id": "vivi",
+      "name": "Vivi",
+      "zhName": "薇薇",
+      "role": "Veterinary Research (AI)",
+      "emoji": "🩺",
+      "color": "#b63a29",
+      "skills": [
+        "Literature review",
+        "Evidence checks",
+        "Questions for a veterinarian"
+      ],
+      "howToInvoke": "「請 Vivi 審核我們的症狀分診流程」",
+      "status": "idle",
+      "currentTask": null,
+      "recentOutputs": []
+    },
+    {
+      "id": "amy",
+      "name": "Amy",
+      "zhName": "艾米",
+      "role": "Admin & PM",
+      "emoji": "📋",
+      "color": "#ab6a08",
+      "skills": [
+        "會議記錄",
+        "Action Items",
+        "Pitch Deck",
+        "排程",
+        "筆記資料庫"
+      ],
+      "howToInvoke": "「請 Amy 整理今天的會議記錄」",
+      "status": "idle",
+      "currentTask": null,
+      "recentOutputs": []
+    }
+  ],
+  "actionItems": [
+    {
+      "item": "Explore an example pet-care research question",
+      "owner": "Ryan",
+      "due": "",
+      "status": "open",
+      "source": "Sample task"
+    }
+  ],
+  "recentActivity": []
+}

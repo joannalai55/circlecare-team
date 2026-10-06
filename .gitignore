@@ -1,0 +1,13 @@
+.DS_Store
+node_modules/
+.env
+.env.*
+.runtime/
+.claude/settings.local.json
+team/shared/team-context.md
+team/shared/action-items/
+team/shared/meeting-notes/
+team/shared/pitch-decks/
+team/shared/notes-database/
+team/*/outputs/
+team/*/knowledge.md
